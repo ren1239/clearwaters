@@ -25,12 +25,12 @@ export default function Home() {
       <header className="container py-8 border-b border-black/[.08] dark:border-white/[.08]">
         <Nav />
       </header>
-      <main className="container min-h-[calc(100vh-160px)] flex items-center justify-end py-16">
+      <main className="container min-h-[calc(100vh-160px)] flex items-center justify-end py-16 ">
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-10  pt-16"
+          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-2 md:gap-10 pt-48  md:pt-16"
         >
           <motion.h1 variants={item} className="text-4xl font-bold leading-8">
             Think. <br />
@@ -40,7 +40,7 @@ export default function Home() {
           </motion.h1>
           <motion.p
             variants={item}
-            className="text-xl font-light italic max-w-xl opacity-80"
+            className="text-md md:text-xl font-light italic max-w-xl opacity-80"
           >
             “Take a simple idea and take it seriously.”
             <br />
@@ -69,7 +69,7 @@ export default function Home() {
             >
               <Link
                 href="https://clarity-fintech.vercel.app/"
-                className="text-primary "
+                className="text-primary hover:underline"
               >
                 Research{" "}
               </Link>{" "}

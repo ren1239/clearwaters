@@ -21,7 +21,7 @@ export default function Toolbox() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-10 pt-20"
+          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right px-4 md:px-0 gap-10 pt-56 md:pt-20"
         >
           <motion.h1
             className="text-4xl font-bold"

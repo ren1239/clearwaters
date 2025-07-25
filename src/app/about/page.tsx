@@ -15,7 +15,7 @@ export default function About() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full lg:w-1/3 xl:w-1/2 flex flex-col items-end text-right gap-10 pt-34 "
+          className="w-full lg:w-1/3 xl:w-1/2 flex flex-col items-end text-right gap-10 pt-64 md:pt-34 "
         >
           <motion.h1
             className="text-4xl font-bold"
