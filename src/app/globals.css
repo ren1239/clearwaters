@@ -19,7 +19,26 @@
   }
 }
 
+/* Fullscreen background image using ::before */
 body {
+  position: relative;
+  color: #ededed;
+  font-family: var(--font-geist-sans);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  z-index: 0;
+}
+
+/* Pseudo-element for background image */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(
       rgba(255, 255, 255, 0.05),
       rgba(255, 255, 255, 0.05)
@@ -27,12 +46,16 @@ body {
     url("/outdate.avif");
   background-size: cover;
   background-position: center;
-  color: #ededed;
-  font-family: var(--font-geist-sans);
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  will-change: transform;
+  background-repeat: no-repeat;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Optional: fallback for older browsers */
+@supports not (background-attachment: fixed) {
+  body::before {
+    background-attachment: scroll;
+  }
 }
 
 .container {
@@ -41,9 +64,9 @@ body {
   padding: 0 5%;
 }
 
+/* Smooth transition unless user prefers reduced motion */
 @media (prefers-reduced-motion: no-preference) {
-  a,
-  button {
-    transition: color 0.3s ease, background-color 0.3s ease;
+  * {
+    transition: all 0.3s ease;
   }
 }
