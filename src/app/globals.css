@@ -27,12 +27,12 @@ body {
     url("/outdate.avif");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
   color: #ededed;
   font-family: var(--font-geist-sans);
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  will-change: transform;
 }
 
 .container {
@@ -42,7 +42,8 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  * {
-    transition: all 0.3s ease;
+  a,
+  button {
+    transition: color 0.3s ease, background-color 0.3s ease;
   }
 }
