@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Clear Waters Capital",
+  title: "Clear Waters Capital LP",
   description: "Clear Minded Asset Management",
   icons: {
     icon: [
