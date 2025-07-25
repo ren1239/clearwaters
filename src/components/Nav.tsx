@@ -5,12 +5,14 @@ export function Nav() {
   return (
     <nav className="flex items-center justify-between">
       <div className="flex items-center gap-2">
-        <Image
-          src="/logo/clear.png"
-          alt="Clear Water Capital"
-          width={240}
-          height={140}
-        />
+        <Link href="/">
+          <Image
+            src="/logo/clear.png"
+            alt="Clear Water Capital"
+            width={240}
+            height={140}
+          />
+        </Link>
       </div>
       <div className="flex gap-6">
         <Link href="/" className="hover:underline">
@@ -21,6 +23,9 @@ export function Nav() {
         </Link>
         <Link href="/toolbox" className="hover:underline">
           Toolbox
+        </Link>{" "}
+        <Link href="/books" className="hover:underline">
+          Books
         </Link>
       </div>
     </nav>

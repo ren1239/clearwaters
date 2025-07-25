@@ -1,7 +1,9 @@
 "use client";
 
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Home() {
   const container = {
@@ -32,7 +34,7 @@ export default function Home() {
         >
           <motion.h1 variants={item} className="text-4xl font-bold leading-8">
             Think. <br />
-            Slow.
+            Concentrate.
             <br />
             Compound.
           </motion.h1>
@@ -65,95 +67,18 @@ export default function Home() {
               className="rounded-full border border-black/[.08] dark:border-white/[.145] hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
               href="#about"
             >
-              Learn More
+              <Link
+                href="https://clarity-fintech.vercel.app/"
+                className="text-primary "
+              >
+                Research{" "}
+              </Link>{" "}
             </motion.a>
           </motion.div>
         </motion.div>
       </main>
 
-      <footer className="w-full bg-black/20 py-8">
-        <div className="flex flex-col sm:flex-row justify-between gap-8 px-32">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg font-semibold">
-                Clear Waters Capital
-              </span>
-            </div>
-            <p className="text-sm opacity-80 max-w-xs">
-              In still waters, we find clarity. <br />
-              In clarity, we grow.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-medium mb-3">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#about" className="hover:underline">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#team" className="hover:underline">
-                    Team
-                  </a>
-                </li>
-                <li>
-                  <a href="#careers" className="hover:underline">
-                    Careers
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-3">Services</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#investing" className="hover:underline">
-                    Investing
-                  </a>
-                </li>
-                <li>
-                  <a href="#advisory" className="hover:underline">
-                    Advisory
-                  </a>
-                </li>
-                <li>
-                  <a href="#research" className="hover:underline">
-                    Research
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-3">Contact</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a
-                    href="mailto:info@clearwater.capital"
-                    className="hover:underline"
-                  >
-                    Email
-                  </a>
-                </li>
-                <li>
-                  <a href="tel:+18005551234" className="hover:underline">
-                    Phone
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="hover:underline">
-                    Form
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="text-sm opacity-60 text-center sm:text-left px-36">
-          © 2025 Clear Water Capital. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
