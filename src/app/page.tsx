@@ -28,18 +28,21 @@ export default function Home() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-10  pt-72"
+          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-10  pt-16"
         >
-          <motion.h1
-            variants={item}
-            className="text-4xl font-bold leading-tight"
-          >
-            Clear Mind <br />
-            Investments{" "}
+          <motion.h1 variants={item} className="text-4xl font-bold leading-8">
+            Think. <br />
+            Slow.
+            <br />
+            Compound.
           </motion.h1>
-          <motion.p variants={item} className="text-xl max-w-xl opacity-80">
-            We build portfolios using multidisciplinary thinking, mental
-            clarity, and patient investing.
+          <motion.p
+            variants={item}
+            className="text-xl font-light italic max-w-xl opacity-80"
+          >
+            “Take a simple idea and take it seriously.”
+            <br />
+            -Charlie Munger
           </motion.p>
 
           <motion.div
@@ -68,8 +71,8 @@ export default function Home() {
         </motion.div>
       </main>
 
-      <footer className="container flex flex-col gap-8 py-8 border-t border-black/[.08] dark:border-white/[.08]">
-        <div className="flex flex-col sm:flex-row justify-between gap-8 mt-10">
+      <footer className="w-full bg-black/20 py-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-8 px-32">
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-lg font-semibold">
@@ -77,7 +80,8 @@ export default function Home() {
               </span>
             </div>
             <p className="text-sm opacity-80 max-w-xs">
-              Sustainable investment solutions for forward-thinking investors.
+              In still waters, we find clarity. <br />
+              In clarity, we grow.
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
@@ -146,7 +150,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="text-sm opacity-60 text-center sm:text-left">
+        <div className="text-sm opacity-60 text-center sm:text-left px-36">
           © 2025 Clear Water Capital. All rights reserved.
         </div>
       </footer>

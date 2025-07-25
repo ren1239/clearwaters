@@ -8,7 +8,7 @@ export function Nav() {
         <Image
           src="/logo/clear.png"
           alt="Clear Water Capital"
-          width={140}
+          width={240}
           height={140}
         />
       </div>

@@ -24,12 +24,12 @@ body {
       rgba(255, 255, 255, 0.05),
       rgba(255, 255, 255, 0.05)
     ),
-    url("/clear_water.avif");
+    url("/outdate.avif");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   color: #ededed;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans);
   margin: 0;
   padding: 0;
   min-height: 100vh;
