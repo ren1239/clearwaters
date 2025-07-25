@@ -1,70 +1,81 @@
+"use client";
+
 import Image from "next/image";
+import { Nav } from "@/components/Nav";
+import { motion } from "framer-motion";
 
 export default function Home() {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
   return (
     <div className="font-sans min-h-screen">
       <header className="container py-8 border-b border-black/[.08] dark:border-white/[.08]">
-        <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/clearwater-logo.svg"
-              alt="Clear Water Capital"
-              width={40}
-              height={40}
-            />
-            <span className="text-xl font-semibold">Clear Water Capital</span>
-          </div>
-          <div className="flex gap-6">
-            <a href="#about" className="hover:underline">
-              About
-            </a>
-            <a href="#services" className="hover:underline">
-              Services
-            </a>
-            <a href="#contact" className="hover:underline">
-              Contact
-            </a>
-          </div>
-        </nav>
+        <Nav />
       </header>
-      <main className="container flex flex-col items-center justify-center min-h-[calc(100vh-160px)] py-16 gap-12">
-        <h1 className="text-4xl font-bold text-center">
-          Investment Solutions
-          <br />
-          For a Sustainable Future
-        </h1>
-        <p className="text-xl text-center max-w-2xl">
-          Clear Water Capital provides innovative financial strategies
-          <br />
-          that align profitability with environmental responsibility.
-        </p>
+      <main className="container min-h-[calc(100vh-160px)] flex items-center justify-end py-16">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-10  pt-72"
+        >
+          <motion.h1
+            variants={item}
+            className="text-4xl font-bold leading-tight"
+          >
+            Clear Mind <br />
+            Investments{" "}
+          </motion.h1>
+          <motion.p variants={item} className="text-xl max-w-xl opacity-80">
+            We build portfolios using multidisciplinary thinking, mental
+            clarity, and patient investing.
+          </motion.p>
 
-        <div className="flex gap-6 items-center flex-col sm:flex-row w-full sm:w-auto">
-          <a
-            className="rounded-full border border-solid border-transparent flex items-center justify-center bg-foreground text-background gap-3 hover:opacity-90 font-medium text-base h-12 px-6 w-full sm:w-auto"
-            href="#contact"
+          <motion.div
+            variants={container}
+            className="flex gap-4 flex-col sm:flex-row justify-end w-full"
           >
-            Contact Us
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] font-medium text-base h-12 px-6 w-full sm:w-auto"
-            href="#about"
-          >
-            Learn More
-          </a>
-        </div>
+            <motion.a
+              variants={item}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="rounded-full border border-transparent bg-foreground text-background px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
+              href="#contact"
+            >
+              Contact Us
+            </motion.a>
+            <motion.a
+              variants={item}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="rounded-full border border-black/[.08] dark:border-white/[.145] hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
+              href="#about"
+            >
+              Learn More
+            </motion.a>
+          </motion.div>
+        </motion.div>
       </main>
+
       <footer className="container flex flex-col gap-8 py-8 border-t border-black/[.08] dark:border-white/[.08]">
-        <div className="flex flex-col sm:flex-row justify-between gap-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-8 mt-10">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Image
-                src="/clearwater-logo.svg"
-                alt="Clear Water Capital"
-                width={32}
-                height={32}
-              />
-              <span className="text-lg font-semibold">Clear Water Capital</span>
+              <span className="text-lg font-semibold">
+                Clear Waters Capital
+              </span>
             </div>
             <p className="text-sm opacity-80 max-w-xs">
               Sustainable investment solutions for forward-thinking investors.
