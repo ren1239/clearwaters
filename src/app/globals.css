@@ -43,7 +43,7 @@ body::before {
       rgba(255, 255, 255, 0.05),
       rgba(255, 255, 255, 0.05)
     ),
-    url("/outdate.avif");
+    url("/outdate.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
