@@ -3,161 +3,89 @@
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function About() {
   return (
-    <div
-      className="font-sans min-h-screen relative bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: 'url("/your-background.jpg")' }}
-    >
-      <header className="container relative z-10">
-        <Nav />
+    <div className="min-h-screen bg-white">
+      <header className="  bg-black w-full">
+        <div className="container mx-auto py-4 bg-black w-full">
+          <Nav />
+        </div>
       </header>
 
-      <main className="container relative z-10 py-16">
-        <motion.div
+      <main className="container mx-auto px-4">
+        <motion.section
+          className="max-w-3xl mx-auto pt-24 pb-24 font-serif text-slate-900"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="bg-white/20 backdrop-blur-sm my-8 text-neutral-800 border-0 shadow-2xl">
-            <CardContent className="prose prose-lg dark:prose-invert max-w-4xl mx-auto p-8 space-y-8">
-              <motion.h1
-                className="text-4xl font-bold text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                About Clear Waters Capital
-              </motion.h1>
+          {/* Page title */}
+          <motion.h1
+            className="text-4xl md:text-5xl font-semibold text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            About
+          </motion.h1>
 
-              <p className="text-base">
-                ClearWaters Capital is a quiet investment partnership guided by
-                clarity, self-discipline, and simple ideas.
-              </p>
-              <p className="text-base">
-                We implement fundamental investment principles, leveraged by
-                in-house developed analysis tools. Our approach is patient,
-                concentrated capital — like water.
-              </p>
+          {/* Small underline / hierarchy cue */}
+          <div className="w-12 h-[2px] bg-slate-700 mx-auto mt-4 mb-12" />
 
-              <hr />
+          {/* Intro */}
+          <p className="text-lg leading-relaxed mb-6">
+            Clear Waters Capital is a quiet, long-term investment partnership
+            focused on structurally advantaged businesses in China and Hong
+            Kong. We study geo politics, industry structure, psycology, and
+            management behavior to understand how a business compounds over
+            time.
+          </p>
 
-              <h2 className="text-2xl font-semibold">
-                Investment Policy Statement (IPS)
-              </h2>
+          <p className="text-lg leading-relaxed mb-10">
+            We manage a concentrated portfolio and view the partnership as the
+            primary vehicle for compounding our own capital alongside a small
+            group of like-minded investors.
+          </p>
 
-              <h3 className="text-3xl font-bold mt-8">1. Executive Summary</h3>
-              <p className="text-base">
-                Clear Waters Capital is a long-term, value-driven limited
-                partnership (LP) fund with $10 million in committed capital. The
-                fund targets superior risk-adjusted returns through a
-                concentrated portfolio of public equities, following the
-                philosophies of Charlie Munger and Warren Buffett.
-              </p>
+          {/* Investment Philosophy */}
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+            Investment Philosophy
+          </h2>
 
-              <h3 className="text-3xl font-bold mt-8">
-                2. Investment Objectives and Philosophy
-              </h3>
-              <ul className="text-base space-y-1">
-                <li>
-                  <strong>Primary Objective:</strong> Long-term capital
-                  appreciation
-                </li>
-                <li>
-                  <strong>Target Return:</strong> 15% annualized
-                </li>
-                <li>
-                  <strong>Benchmark:</strong> Compare with both S&P 500 and MSCI
-                  Global Index
-                </li>
-                <li>
-                  <strong>Time Horizon:</strong> 10+ years
-                </li>
-                <li>
-                  <strong>Volatility Tolerance:</strong> High
-                </li>
-                <li>
-                  <strong>Moral Mandate:</strong> Invest in companies aligned
-                  with long-term customer/investor value (Tech, EV, Consumer,
-                  Telecom)
-                </li>
-              </ul>
+          <p className="text-lg leading-relaxed mb-4">
+            We invest in a small number of businesses with durable economics,
+            simple value propositions, and rational capital allocation. The
+            portfolio typically holds 8–10 positions; we prefer depth of
+            understanding over breadth of exposure.
+          </p>
 
-              <h3 className="text-3xl font-bold mt-8">
-                3. Investment Constraints
-              </h3>
-              <ul className="text-base space-y-1">
-                <li>No liquidity needs for the first 10 years</li>
-                <li>Tax-agnostic</li>
-                <li>No regulatory constraints beyond LP structure</li>
-                <li>Public equities only, no leverage</li>
-                <li>No FX hedging — assumes long-term USD/CNY/HKD stability</li>
-              </ul>
+          <p className="text-lg leading-relaxed mb-4">
+            Our orientation is long-cycle. We think in years rather than
+            quarters and accept volatility as the cost of compounding, provided
+            intrinsic value remains intact.
+          </p>
 
-              <h3 className="text-3xl font-bold mt-8">
-                4. Strategic Asset Allocation
-              </h3>
-              <p className="text-base">
-                100% public equities. Portfolio of 8–10 positions, initially
-                equal-weighted. No cap on position size; winners are allowed to
-                grow.
-              </p>
+          <p className="text-lg leading-relaxed">
+            We aim to communicate clearly, in order to share our market
+            commentary, and let the results of our performance speak for itself
+            over time.
+          </p>
 
-              <h3 className="text-3xl font-bold mt-8">
-                5. Security Selection Criteria
-              </h3>
-              <ul className="text-base space-y-1">
-                <li>Bottom-up, fundamental value analysis</li>
-                <li>Valuation via DCF, SOTP, or manager discretion</li>
-                <li>Focus on U.S., China, and Hong Kong equities</li>
-                <li>Manager shares intrinsic vs. market value with LPs</li>
-              </ul>
-
-              <h3 className="text-3xl font-bold mt-8">
-                6. Rebalancing and Monitoring
-              </h3>
-              <ul className="text-base space-y-1">
-                <li>Review semiannually</li>
-                <li>
-                  Cyclical rebalancing based on valuation/geopolitical shifts
-                </li>
-                <li>Dynamic U.S./China weighting</li>
-              </ul>
-
-              <h3 className="text-3xl font-bold mt-8">7. Risk Management</h3>
-              <ul className="text-base space-y-1">
-                <li>Margin of safety focus</li>
-                <li>No leverage or derivatives</li>
-                <li>No defined drawdown constraints</li>
-              </ul>
-
-              <h3 className="text-3xl font-bold mt-8">
-                8. Performance & Compensation
-              </h3>
-              <ul className="text-base space-y-1">
-                <li>Benchmarked against S&P and MSCI Global</li>
-                <li>Quarterly reporting includes intrinsic value updates</li>
-                <li>Fee: 4% hurdle + 25% performance fee on excess</li>
-              </ul>
-
-              <h3 className="text-3xl font-bold mt-8">9. Governance</h3>
-              <ul className="text-base space-y-1">
-                <li>Fiduciary duty to LPs</li>
-                <li>Semiannual disclosure of positions and rationale</li>
-              </ul>
-
-              <p className="text-base">
-                <strong>Prepared for:</strong> Clear Waters Capital LP
-                <br />
-                <strong>Prepared by:</strong> Portfolio Management Team
-                <br />
-                <strong>Effective Date:</strong> 2025-07-31
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
+          {/* Optional contact block, if you want it later */}
+          {/* 
+          <p className="text-lg leading-relaxed mt-10">
+            If you are a prospective investor or would like to learn more about
+            Clear Waters Capital, please contact us at{" "}
+            <a
+              href="mailto:info@clearwaterscapital.com"
+              className="underline decoration-slate-500 underline-offset-4"
+            >
+              info@clearwaterscapital.com
+            </a>.
+          </p>
+          */}
+        </motion.section>
       </main>
 
       <Footer />

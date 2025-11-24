@@ -56,7 +56,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="rounded-full border border-transparent bg-foreground text-background px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
-              href="#contact"
+              href="/about"
             >
               Contact Us
             </motion.a>
@@ -65,10 +65,10 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="rounded-full border text-black/70 hover:text-white/80 bg-white/30 border-black/[.08] dark:border-white/[.145] hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
-              href="#about"
+              href="/about"
             >
               <Link
-                href="https://clarity-fintech.vercel.app/"
+                href="https://seekingalpha.com/user/51337070"
                 className="text-primary hover:underline"
               >
                 Research{" "}
