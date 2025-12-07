@@ -50,7 +50,7 @@ export default function Toolbox() {
               href="#about"
             >
               <Link
-                href="https://clarity-fintech.vercel.app/"
+                href="https://clarity.clearwaterscapital.com//"
                 className="text-primary "
               >
                 Clarity Research Platform
