@@ -34,11 +34,20 @@ export function Nav() {
         <Link href="/" className="hover:underline">
           Home
         </Link>
+        <Link
+          href="https://client.clearwaterscapital.com/"
+          className="hover:underline"
+        >
+          Clients
+        </Link>
         <Link href="/about" className="hover:underline">
           About
         </Link>
-        <Link href="/toolbox" className="hover:underline">
-          Toolbox
+        <Link
+          href="https://clarity.clearwaterscapital.com/"
+          className="hover:underline"
+        >
+          Analysis
         </Link>
         <Link href="/books" className="hover:underline">
           Books
