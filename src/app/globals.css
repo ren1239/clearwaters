@@ -78,3 +78,46 @@ body {
     transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   }
 }
+
+/* ─── Article body typography ─────────────────────── */
+.article-body h2 {
+  font-family: var(--font-playfair);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.article-body p {
+  font-family: var(--font-dm-sans);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+}
+
+.article-body strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.article-body ul,
+.article-body ol {
+  font-family: var(--font-dm-sans);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  background: rgba(200, 169, 110, 0.06);
+  font-style: italic;
+  color: #444;
+}
