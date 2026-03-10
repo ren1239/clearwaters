@@ -20,7 +20,7 @@ export function Nav() {
       <div className="flex items-center gap-4 w-full justify-between md:justify-start">
         {/* Mobile: Burger Menu */}
         {!isOpen && (
-          <button className="md:hidden p-2" onClick={() => setIsOpen(true)}>
+          <button className="md:hidden p-2" onClick={() => setIsOpen(true)} aria-label="Open navigation menu">
             <Menu size={24} />
           </button>
         )}
@@ -71,6 +71,7 @@ export function Nav() {
             <button
               className="absolute top-4 right-4 p-2"
               onClick={() => setIsOpen(false)}
+              aria-label="Close navigation menu"
             >
               <X size={24} />
             </button>
