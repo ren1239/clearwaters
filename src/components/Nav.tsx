@@ -4,6 +4,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
+const navLinks = [
+  { label: "Research", href: "/research" },
+  { label: "Books",    href: "/books" },
+  { label: "About",    href: "/about" },
+  { label: "Clients",  href: "https://client.clearwaterscapital.com/", external: true },
+];
+
 export function Nav() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,27 +38,23 @@ export function Nav() {
 
       {/* Desktop Nav */}
       <div className="hidden md:flex gap-6">
-        <Link href="/" className="hover:underline">
-          Home
-        </Link>
-        <Link
-          href="https://client.clearwaterscapital.com/"
-          className="hover:underline"
-        >
-          Clients
-        </Link>
-        <Link href="/about" className="hover:underline">
-          About
-        </Link>
-        <Link
-          href="https://clarity.clearwaterscapital.com/"
-          className="hover:underline"
-        >
-          Analysis
-        </Link>
-        <Link href="/books" className="hover:underline">
-          Books
-        </Link>
+        {navLinks.map(({ label, href, external }) =>
+          external ? (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              {label}
+            </a>
+          ) : (
+            <Link key={label} href={href} className="hover:underline">
+              {label}
+            </Link>
+          )
+        )}
       </div>
 
       {/* Mobile Slide-out Nav */}
@@ -73,18 +76,29 @@ export function Nav() {
             </button>
 
             <div className="flex flex-col gap-6 text-xl mt-12">
-              {["Home", "About", "Toolbox", "Books"].map((label) => (
-                <Link
-                  key={label}
-                  href={`/${
-                    label.toLowerCase() === "home" ? "" : label.toLowerCase()
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                  className="hover:underline py-2"
-                >
-                  {label}
-                </Link>
-              ))}
+              {navLinks.map(({ label, href, external }) =>
+                external ? (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className="hover:underline py-2"
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setIsOpen(false)}
+                    className="hover:underline py-2"
+                  >
+                    {label}
+                  </Link>
+                )
+              )}
             </div>
           </motion.div>
         )}
