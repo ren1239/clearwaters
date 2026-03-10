@@ -37,14 +37,14 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link
+                <a
                   href="https://client.clearwaterscapital.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:opacity-70 transition-opacity"
                 >
                   Client Portal
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
