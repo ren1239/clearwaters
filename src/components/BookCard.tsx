@@ -8,12 +8,24 @@ interface BookCardProps {
 
 export function BookCard({ title, author, image }: BookCardProps) {
   return (
-    <div className="bg-white/30 rounded-lg p-4 hover:bg-black/70 transition-all cursor-pointer text-black hover:text-white">
-      <div className="relative aspect-square mb-4">
-        <Image src={image} alt={title} fill className="rounded object-cover" />
+    <div
+      className="group cursor-pointer"
+      style={{ transition: "opacity 0.2s ease" }}
+    >
+      <div className="relative aspect-[2/3] mb-3 overflow-hidden rounded-sm" style={{ background: "var(--muted)" }}>
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+        />
       </div>
-      <h3 className="font-medium truncate">{title}</h3>
-      <p className="text-sm text-muted-foreground">{author}</p>
+      <p className="text-sm font-semibold leading-snug mb-1 group-hover:opacity-70 transition-opacity" style={{ color: "var(--ink)" }}>
+        {title}
+      </p>
+      <p className="text-xs" style={{ color: "var(--subtle)" }}>
+        {author}
+      </p>
     </div>
   );
 }
