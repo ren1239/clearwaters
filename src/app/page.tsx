@@ -1,84 +1,101 @@
 "use client";
 
 import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function Home() {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.15 } },
+};
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
+const item = {
+  hidden: { opacity: 0, y: 16 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+export default function Home() {
   return (
-    <div className="font-sans min-h-screen">
-      <header className="container py-8 border-b border-black/[.08] dark:border-white/[.08]">
+    <div className="hero-bg grain min-h-screen flex flex-col">
+      {/* Nav floats over hero */}
+      <header className="relative z-10 container py-6">
         <Nav />
       </header>
-      <main className="container min-h-[calc(100vh-160px)] flex items-center justify-end py-16 ">
+
+      {/* Centered gateway */}
+      <main className="relative z-10 flex-1 flex items-center justify-center">
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="w-full lg:w-2/3 xl:w-1/2 flex flex-col items-end text-right gap-2 md:gap-10 pt-48  md:pt-16"
+          className="flex flex-col items-center text-center gap-5 px-6 max-w-sm"
         >
-          <motion.h1 variants={item} className="text-4xl font-bold leading-8">
-            Think. <br />
-            Concentrate.
-            <br />
-            Compound.
-          </motion.h1>
           <motion.p
             variants={item}
-            className="text-md md:text-xl font-light italic max-w-xl opacity-80"
+            className="text-xs font-semibold tracking-[0.22em] uppercase"
+            style={{ color: "var(--teal)" }}
           >
-            “Take a simple idea and take it seriously.”
-            <br />
-            -Charlie Munger
+            Clear Waters Capital
           </motion.p>
 
-          <motion.div
-            variants={container}
-            className="flex gap-4 flex-col sm:flex-row justify-end w-full"
+          <motion.h1
+            variants={item}
+            className="font-display text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight"
+            style={{ color: "var(--ivory)" }}
           >
-            <motion.a
-              variants={item}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="rounded-full border border-transparent bg-foreground text-background px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
-              href="/about"
-            >
-              Contact Us
-            </motion.a>
-            <motion.a
-              variants={item}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="rounded-full border text-black/70 hover:text-white/80 bg-white/30 border-black/[.08] dark:border-white/[.145] hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] px-6 h-12 flex items-center justify-center font-medium text-base w-full sm:w-auto"
-              href="/about"
-            >
+            Think.<br />
+            Concentrate.<br />
+            Compound.
+          </motion.h1>
+
+          {/* Gold rule */}
+          <motion.div
+            variants={item}
+            className="h-px w-7"
+            style={{ background: "var(--gold)" }}
+          />
+
+          <motion.p
+            variants={item}
+            className="text-sm leading-relaxed"
+            style={{ color: "rgba(247,245,240,0.55)" }}
+          >
+            In still waters, we find clarity.
+          </motion.p>
+
+          <motion.div variants={container} className="flex flex-col gap-3 w-44 mt-2">
+            <motion.div variants={item}>
               <Link
-                href="https://seekingalpha.com/user/51337070"
-                className="text-primary hover:underline"
+                href="/research"
+                className="block w-full py-3 text-center text-xs font-bold tracking-[0.1em] uppercase rounded-sm transition-opacity hover:opacity-80"
+                style={{ background: "var(--teal)", color: "#fff" }}
               >
-                Research{" "}
-              </Link>{" "}
-            </motion.a>
+                Read Our Research
+              </Link>
+            </motion.div>
+            <motion.div variants={item}>
+              <a
+                href="mailto:info@clearwaterscapital.com"
+                className="block w-full py-3 text-center text-xs tracking-[0.1em] uppercase rounded-sm border transition-colors hover:border-white/40"
+                style={{
+                  borderColor: "rgba(247,245,240,0.25)",
+                  color: "rgba(247,245,240,0.7)",
+                }}
+              >
+                Contact Us
+              </a>
+            </motion.div>
           </motion.div>
         </motion.div>
       </main>
 
-      <Footer />
+      {/* Minimal footer on hero */}
+      <footer
+        className="relative z-10 container py-4 text-center text-xs"
+        style={{ color: "rgba(247,245,240,0.25)" }}
+      >
+        © {new Date().getFullYear()} Clear Waters Capital LP
+      </footer>
     </div>
   );
 }
