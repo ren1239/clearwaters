@@ -67,7 +67,7 @@ export default function Home() {
             <motion.div variants={item}>
               <Link
                 href="/research"
-                className="block w-full py-3 text-center text-xs font-bold tracking-[0.1em] uppercase rounded-sm transition-opacity hover:opacity-80"
+                className="block w-full py-3 text-center text-xs font-bold tracking-[0.1em] uppercase rounded-sm transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 style={{ background: "var(--teal)", color: "#fff" }}
               >
                 Read Our Research
@@ -76,7 +76,7 @@ export default function Home() {
             <motion.div variants={item}>
               <a
                 href="mailto:info@clearwaterscapital.com"
-                className="block w-full py-3 text-center text-xs tracking-[0.1em] uppercase rounded-sm border transition-colors hover:border-white/40"
+                className="block w-full py-3 text-center text-xs tracking-[0.1em] uppercase rounded-sm border transition-colors hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 style={{
                   borderColor: "rgba(247,245,240,0.25)",
                   color: "rgba(247,245,240,0.7)",
