@@ -2,52 +2,58 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-black/40 py-8">
-      <div className="container flex flex-col gap-8">
-        <div className="flex flex-col sm:flex-row justify-between gap-8">
+    <footer className="w-full py-10 mt-16" style={{ borderTop: "1px solid var(--muted)" }}>
+      <div className="container flex flex-col sm:flex-row justify-between gap-8">
+
+        <div>
+          <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--ink)" }}>
+            Clear Waters Capital
+          </p>
+          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--subtle)" }}>
+            In Still Waters<br />We Find Clarity
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg font-semibold">
-                Clear Waters Capital
-              </span>
-            </div>
-            <p className="text-sm opacity-80 max-w-xs">
-              In Still Waters <br /> We Find Clarity
-            </p>
+            <p className="font-semibold mb-3" style={{ color: "var(--ink)" }}>Company</p>
+            <ul className="space-y-2" style={{ color: "var(--subtle)" }}>
+              <li><Link href="/about" className="hover:opacity-70 transition-opacity">About</Link></li>
+            </ul>
           </div>
-
-          {/* Grid with no links */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-medium mb-3">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li>About</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-3">Services</h3>
-              <ul className="space-y-2 text-sm">
-                <li>Investing</li>
-                <li>Advisory</li>
-                <li>Research</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-3">Contact</h3>
-              <ul className="space-y-2 text-sm">
-                <li>Email</li>
-                <li>Phone</li>
-                <li>Form</li>
-              </ul>
-            </div>
+          <div>
+            <p className="font-semibold mb-3" style={{ color: "var(--ink)" }}>Research</p>
+            <ul className="space-y-2" style={{ color: "var(--subtle)" }}>
+              <li><Link href="/research" className="hover:opacity-70 transition-opacity">Memos</Link></li>
+              <li><Link href="/research?type=letters" className="hover:opacity-70 transition-opacity">Letters</Link></li>
+            </ul>
+          </div>
+          <div>
+            <p className="font-semibold mb-3" style={{ color: "var(--ink)" }}>Contact</p>
+            <ul className="space-y-2" style={{ color: "var(--subtle)" }}>
+              <li>
+                <a href="mailto:info@clearwaterscapital.com" className="hover:opacity-70 transition-opacity">
+                  Email
+                </a>
+              </li>
+              <li>
+                <Link
+                  href="https://client.clearwaterscapital.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-70 transition-opacity"
+                >
+                  Client Portal
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="text-sm opacity-60 text-center sm:text-left">
-          © 2025 Clear Waters Capital. All rights reserved.
-        </div>
+      </div>
+
+      <div className="container mt-8 pt-6 text-xs" style={{ borderTop: "1px solid var(--muted)", color: "var(--subtle)" }}>
+        © {new Date().getFullYear()} Clear Waters Capital LP. All rights reserved.
       </div>
     </footer>
   );
