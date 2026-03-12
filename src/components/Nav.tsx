@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -15,6 +16,9 @@ const navLinks = [
 
 export function Nav() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const logoSrc = isHomePage ? "/logo/clear.png" : "/logo/clear_Black.png";
 
   return (
     <nav className="flex items-center justify-between w-full">
@@ -30,7 +34,7 @@ export function Nav() {
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
           <Image
-            src="/logo/clear.png"
+            src={logoSrc}
             alt="Clear Water Capital"
             width={240}
             height={140}

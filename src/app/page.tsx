@@ -11,7 +11,7 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 16 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 };
 
 export default function Home() {
@@ -28,12 +28,12 @@ export default function Home() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="flex flex-col items-center text-center gap-5 px-6 max-w-sm"
+          className="flex flex-col items-start text-left gap-5 px-6 max-w-sm ml-auto mr-[10%]"
         >
           <motion.p
             variants={item}
             className="text-xs font-semibold tracking-[0.22em] uppercase"
-            style={{ color: "var(--teal)" }}
+            style={{ color: "var(--gold)" }}
           >
             Clear Waters Capital
           </motion.p>
