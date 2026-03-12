@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <div className="hero-bg grain min-h-screen flex flex-col">
       {/* Nav floats over hero */}
-      <header className="relative z-10 container py-6" style={{ color: "var(--ivory)" }}>
+      <header className="relative z-50 container py-6" style={{ color: "var(--ivory)" }}>
         <Nav />
       </header>
 
