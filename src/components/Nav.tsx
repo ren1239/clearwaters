@@ -27,7 +27,11 @@ export function Nav() {
       <div className="flex items-center gap-4 w-full justify-between md:justify-start">
         {/* Mobile: Burger Menu */}
         {!isOpen && (
-          <button className="md:hidden p-2" onClick={() => setIsOpen(true)} aria-label="Open navigation menu">
+          <button 
+            className={`md:hidden p-2 ${isHomePage ? 'text-white' : 'text-foreground'}`} 
+            onClick={() => setIsOpen(true)} 
+            aria-label="Open navigation menu"
+          >
             <Menu size={24} />
           </button>
         )}
@@ -44,7 +48,7 @@ export function Nav() {
       </div>
 
       {/* Desktop Nav */}
-      <div className="hidden md:flex gap-6">
+      <div className={`hidden md:flex gap-6 ${isHomePage ? 'text-white' : 'text-foreground'}`}>
         {navLinks.map(({ label, href, external, newTab }) =>
           external ? (
             <a
@@ -72,18 +76,18 @@ export function Nav() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 bg-background z-50 pt-20 px-6 md:hidden"
+            className="fixed inset-0 bg-background z-50 pt-20 px-6 md:hidden text-foreground"
           >
             {/* Close Button inside the panel */}
             <button
-              className="absolute top-4 right-4 p-2"
+              className="absolute top-4 right-4 p-2 text-foreground"
               onClick={() => setIsOpen(false)}
               aria-label="Close navigation menu"
             >
               <X size={24} />
             </button>
 
-            <div className="flex flex-col gap-6 text-xl mt-12">
+            <div className="flex flex-col gap-6 text-xl mt-12 text-foreground">
               {navLinks.map(({ label, href, external, newTab }) =>
                 external ? (
                   <a
