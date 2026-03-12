@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Research", href: "/research" },
-  { label: "Simulator", href: "https://simulator.clearwaterscapital.com/", external: true },
+  { label: "Simulator", href: "https://simulator.clearwaterscapital.com/", external: true, newTab: false },
   { label: "Books",    href: "/books" },
   { label: "About",    href: "/about" },
   { label: "Clients",  href: "https://client.clearwaterscapital.com/", external: true },
@@ -45,13 +45,13 @@ export function Nav() {
 
       {/* Desktop Nav */}
       <div className="hidden md:flex gap-6">
-        {navLinks.map(({ label, href, external }) =>
+        {navLinks.map(({ label, href, external, newTab }) =>
           external ? (
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={newTab === false ? undefined : "_blank"}
+              rel={newTab === false ? undefined : "noopener noreferrer"}
               className="hover:underline"
             >
               {label}
@@ -84,13 +84,13 @@ export function Nav() {
             </button>
 
             <div className="flex flex-col gap-6 text-xl mt-12">
-              {navLinks.map(({ label, href, external }) =>
+              {navLinks.map(({ label, href, external, newTab }) =>
                 external ? (
                   <a
                     key={label}
                     href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={newTab === false ? undefined : "_blank"}
+                    rel={newTab === false ? undefined : "noopener noreferrer"}
                     onClick={() => setIsOpen(false)}
                     className="hover:underline py-2"
                   >
