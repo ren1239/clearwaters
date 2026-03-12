@@ -14,7 +14,7 @@ const ratingColors: Record<string, string> = {
 };
 
 export function ArticleMetaBadges({ frontmatter, livePrice }: Props) {
-  const { ticker, rating, priceTarget, priceAtPublication, pdfUrl, type } = frontmatter;
+  const { ticker, rating, priceTarget, priceAtPublication, pdfUrl, type, currency = "USD" } = frontmatter;
 
   if (type === "letter") {
     return (
@@ -57,7 +57,7 @@ export function ArticleMetaBadges({ frontmatter, livePrice }: Props) {
           className="text-xs py-1 px-3 rounded-sm"
           style={{ border: "1px solid var(--muted)", color: "var(--subtle)" }}
         >
-          PT {formatPrice(priceTarget)}
+          PT {formatPrice(priceTarget, currency)}
         </span>
       )}
       {priceAtPublication != null && (
@@ -65,7 +65,7 @@ export function ArticleMetaBadges({ frontmatter, livePrice }: Props) {
           className="text-xs py-1 px-3 rounded-sm"
           style={{ border: "1px solid var(--muted)", color: "var(--subtle)" }}
         >
-          Pub {formatPrice(priceAtPublication)}
+          Pub {formatPrice(priceAtPublication, currency)}
         </span>
       )}
       {livePrice && (
@@ -76,7 +76,7 @@ export function ArticleMetaBadges({ frontmatter, livePrice }: Props) {
             color: livePrice.price != null ? "var(--teal)" : "var(--subtle)",
           }}
         >
-          Now {formatPrice(livePrice.price)}
+          Now {formatPrice(livePrice.price, livePrice.currency)}
           {livePrice.direction === "up" && " ↑"}
           {livePrice.direction === "down" && " ↓"}
         </span>

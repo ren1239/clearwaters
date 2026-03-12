@@ -17,10 +17,12 @@ export interface ResearchFrontmatter {
   excerpt: string;
   summary?: string;            // 1–2 sentence italic pull-quote shown in article header
   // Memo-only fields (omit for letters)
-  ticker?: string;             // e.g. "$TCEHY"
+  ticker?: string;             // e.g. "$TCEHY" or "005930.KS"
   rating?: ResearchRating;
-  priceTarget?: number;        // USD
-  priceAtPublication?: number; // USD
+  currency?: string;           // ISO code: "USD" | "HKD" | "KRW" | "CNY" | "CNH" | "SGD" | "TWD" — defaults to "USD"
+  exchange?: string;           // e.g. "KRX" | "HKEX" | "NYSE" | "NASDAQ" | "OTC"
+  priceTarget?: number;        // in the currency above
+  priceAtPublication?: number; // in the currency above
   // Letter-only fields
   pdfUrl?: string;
 }

@@ -34,7 +34,7 @@ export default async function ArticlePage({
   const { frontmatter, content } = post;
 
   const livePrice = frontmatter.ticker
-    ? await getLivePrice(frontmatter.ticker, frontmatter.priceAtPublication)
+    ? await getLivePrice(frontmatter.ticker, frontmatter.priceAtPublication, frontmatter.currency ?? "USD")
     : undefined;
 
   return (

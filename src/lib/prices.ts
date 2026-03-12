@@ -15,7 +15,8 @@ export interface LivePrice {
  */
 export async function getLivePrice(
   ticker: string,
-  priceAtPublication?: number
+  priceAtPublication?: number,
+  currency = "USD"
 ): Promise<LivePrice> {
   const symbol = ticker.replace("$", "");
 
@@ -42,14 +43,34 @@ export async function getLivePrice(
       else if (price < priceAtPublication) direction = "down";
     }
 
-    return { ticker, price, currency: "USD", direction, priceAtPublication };
+    return { ticker, price, currency, direction, priceAtPublication };
   } catch {
-    return { ticker, price: null, currency: "USD", direction: null, priceAtPublication };
+    return { ticker, price: null, currency, direction: null, priceAtPublication };
   }
 }
 
-/** Format price for display: $53.40. Accepts null or undefined. */
-export function formatPrice(price: number | null | undefined): string {
+/** Currency symbols for display */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$",
+  HKD: "HK$",
+  CNY: "¥",
+  CNH: "¥",
+  SGD: "S$",
+  TWD: "NT$",
+};
+
+/**
+ * Format price for display, currency-aware.
+ * KRW: whole numbers with commas (e.g. ₩173,500)
+ * Others: symbol + 2 decimal places (e.g. $53.40, HK$72.00)
+ */
+export function formatPrice(price: number | null | undefined, currency = "USD"): string {
   if (price == null) return "—";
-  return `$${price.toFixed(2)}`;
+
+  if (currency === "KRW") {
+    return `₩${Math.round(price).toLocaleString("en-US")}`;
+  }
+
+  const symbol = CURRENCY_SYMBOLS[currency] ?? currency + " ";
+  return `${symbol}${price.toFixed(2)}`;
 }

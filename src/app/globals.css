@@ -121,3 +121,44 @@ body {
   font-style: italic;
   color: #444;
 }
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-dm-sans);
+  font-size: 0.875rem;
+  margin: 2rem 0;
+}
+
+.article-body thead tr {
+  border-bottom: 2px solid var(--ink);
+}
+
+.article-body th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+
+.article-body th:first-child {
+  padding-left: 0;
+}
+
+.article-body td {
+  padding: 0.55rem 0.75rem;
+  color: var(--ink);
+  border-bottom: 1px solid var(--muted);
+  vertical-align: top;
+}
+
+.article-body td:first-child {
+  padding-left: 0;
+  color: var(--subtle);
+  font-size: 0.8125rem;
+}
+
+.article-body tbody tr:last-child td {
+  border-bottom: none;
+}
