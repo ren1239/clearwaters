@@ -17,7 +17,6 @@ interface CompanyGroup {
   companyName: string;
   ticker: string;
   latestRating?: string;
-  latestPriceTarget?: number;
   currency: string;
   exchange?: string;
   posts: ResearchFrontmatter[];
@@ -30,10 +29,13 @@ const ratingColor: Record<string, string> = {
 };
 
 const ratingBg: Record<string, string> = {
-  BUY: "rgba(45,139,139,0.08)",
-  HOLD: "rgba(200,169,110,0.08)",
-  SELL: "rgba(192,57,43,0.08)",
+  BUY: "rgba(45,139,139,0.09)",
+  HOLD: "rgba(200,169,110,0.09)",
+  SELL: "rgba(192,57,43,0.09)",
 };
+
+// 6-column ledger grid: date | category | title | rating | pt | pub
+const LEDGER_COLS = "52px 72px 1fr 52px 72px 72px";
 
 function extractCompanyName(title: string): string {
   return title.split(":")[0].trim();
@@ -65,7 +67,6 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
         companyName: extractCompanyName(latest.title),
         ticker,
         latestRating: latest.rating,
-        latestPriceTarget: latest.priceTarget,
         currency: latest.currency ?? "USD",
         exchange: latest.exchange,
         posts: sorted,
@@ -101,7 +102,6 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
       {showMemos &&
         companyGroups.map((group, gi) => {
           const col = group.latestRating ? ratingColor[group.latestRating] : "var(--muted)";
-          const bg = group.latestRating ? ratingBg[group.latestRating] : "transparent";
 
           return (
             <motion.div
@@ -111,7 +111,7 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
               transition={{ delay: gi * 0.07, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               className="relative pl-5 mb-14"
             >
-              {/* Rating stripe — left edge accent */}
+              {/* Rating stripe */}
               <div
                 className="absolute left-0 top-0 bottom-0 w-[3px] rounded-full"
                 style={{ background: col }}
@@ -119,8 +119,8 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
 
               {/* Company header */}
               <div
-                className="flex items-start justify-between gap-6 pb-3"
-                style={{ borderBottom: `1px solid ${col}` }}
+                className="flex items-center justify-between gap-6 pb-3"
+                style={{ borderBottom: `1.5px solid ${col}` }}
               >
                 <div className="flex items-baseline gap-3 flex-wrap min-w-0">
                   <h2
@@ -131,11 +131,7 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
                   </h2>
                   <span
                     className="text-[9px] font-bold tracking-[0.22em] uppercase px-2 py-[3px] rounded-[2px] flex-shrink-0"
-                    style={{
-                      background: "var(--ink)",
-                      color: "var(--ivory)",
-                      fontFamily: "var(--font-dm-sans)",
-                    }}
+                    style={{ background: "var(--ink)", color: "var(--ivory)", fontFamily: "var(--font-dm-sans)" }}
                   >
                     {group.ticker?.replace("$", "")}
                   </span>
@@ -149,89 +145,143 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
                   )}
                 </div>
 
-                <div
-                  className="flex items-center gap-3 flex-shrink-0 pt-[2px]"
-                  style={{ fontFamily: "var(--font-dm-sans)" }}
-                >
-                  {group.latestRating && (
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-[0.18em] px-3 py-[5px] rounded-[2px]"
-                      style={{ color: col, border: `1px solid ${col}`, background: bg }}
-                    >
-                      {group.latestRating}
-                    </span>
-                  )}
-                  {group.latestPriceTarget != null && (
-                    <span
-                      className="text-xs"
-                      style={{ color: "var(--subtle)" }}
-                    >
-                      PT{" "}
-                      <span style={{ color: "var(--ink)", fontWeight: 600 }}>
-                        {formatPrice(group.latestPriceTarget, group.currency)}
-                      </span>
-                    </span>
-                  )}
-                </div>
+                {/* Current rating badge — prominent, right-aligned */}
+                {group.latestRating && (
+                  <span
+                    className="text-[11px] font-bold uppercase tracking-[0.2em] px-4 py-[6px] rounded-[2px] flex-shrink-0"
+                    style={{
+                      color: col,
+                      border: `1px solid ${col}`,
+                      background: group.latestRating ? ratingBg[group.latestRating] : "transparent",
+                      fontFamily: "var(--font-dm-sans)",
+                    }}
+                  >
+                    {group.latestRating}
+                  </span>
+                )}
               </div>
 
-              {/* Article sub-rows */}
-              <div>
-                {group.posts.map((post, pi) => (
-                  <motion.div
-                    key={post.slug}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: gi * 0.07 + pi * 0.05 + 0.18, duration: 0.28 }}
+              {/* Column headers */}
+              <div
+                className="grid gap-x-4 px-3 -mx-3 py-[6px]"
+                style={{
+                  gridTemplateColumns: LEDGER_COLS,
+                  borderBottom: "1px solid var(--muted)",
+                }}
+              >
+                {(["Date", "Type", "", "Rating", "PT", "At pub"] as const).map((label, i) => (
+                  <span
+                    key={i}
+                    className={`text-[9px] font-semibold uppercase tracking-[0.18em] ${i >= 3 ? "text-right" : ""}`}
+                    style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
                   >
-                    <Link href={`/research/${post.slug}`} className="block group">
-                      <div
-                        className="grid items-center gap-x-5 py-3 px-3 -mx-3 rounded-[2px] hover:bg-[rgba(28,28,28,0.03)] transition-colors"
-                        style={{
-                          gridTemplateColumns: "52px 80px 1fr",
-                          borderBottom: "1px solid var(--muted)",
-                        }}
-                      >
-                        <span
-                          className="text-[11px] tabular-nums leading-none"
-                          style={{
-                            color: "var(--subtle)",
-                            fontFamily: "var(--font-dm-sans)",
-                          }}
-                        >
-                          {new Date(post.date).toLocaleDateString("en-US", {
-                            month: "short",
-                            year: "2-digit",
-                          })}
-                        </span>
-
-                        <span
-                          className="text-[10px] font-semibold uppercase tracking-widest leading-none"
-                          style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
-                        >
-                          {post.category}
-                        </span>
-
-                        <span
-                          className="text-sm leading-snug transition-colors group-hover:text-[var(--teal)]"
-                          style={{
-                            color: "var(--ink)",
-                            fontFamily: "var(--font-dm-sans)",
-                            fontWeight: 400,
-                          }}
-                        >
-                          {getArticleSubtitle(post.title)}
-                          <span
-                            className="ml-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                            style={{ color: "var(--teal)" }}
-                          >
-                            →
-                          </span>
-                        </span>
-                      </div>
-                    </Link>
-                  </motion.div>
+                    {label}
+                  </span>
                 ))}
+              </div>
+
+              {/* Article rows */}
+              <div>
+                {group.posts.map((post, pi) => {
+                  const postCol = post.rating ? ratingColor[post.rating] : "var(--subtle)";
+                  const postBg = post.rating ? ratingBg[post.rating] : "transparent";
+                  const currency = post.currency ?? "USD";
+
+                  return (
+                    <motion.div
+                      key={post.slug}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: gi * 0.07 + pi * 0.05 + 0.18, duration: 0.28 }}
+                    >
+                      <Link href={`/research/${post.slug}`} className="block group">
+                        <div
+                          className="grid items-center gap-x-4 py-[11px] px-3 -mx-3 rounded-[2px] hover:bg-[rgba(28,28,28,0.03)] transition-colors"
+                          style={{
+                            gridTemplateColumns: LEDGER_COLS,
+                            borderBottom: "1px solid var(--muted)",
+                          }}
+                        >
+                          {/* Date */}
+                          <span
+                            className="text-[11px] tabular-nums leading-none"
+                            style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            {new Date(post.date).toLocaleDateString("en-US", {
+                              month: "short",
+                              year: "2-digit",
+                            })}
+                          </span>
+
+                          {/* Category */}
+                          <span
+                            className="text-[10px] font-semibold uppercase tracking-widest leading-none truncate"
+                            style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
+                          >
+                            {post.category}
+                          </span>
+
+                          {/* Title */}
+                          <span
+                            className="text-sm leading-snug transition-colors group-hover:text-[var(--teal)] min-w-0"
+                            style={{ color: "var(--ink)", fontFamily: "var(--font-dm-sans)", fontWeight: 400 }}
+                          >
+                            {getArticleSubtitle(post.title)}
+                            <span
+                              className="ml-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                              style={{ color: "var(--teal)" }}
+                            >
+                              →
+                            </span>
+                          </span>
+
+                          {/* Rating — fixed-width, centered */}
+                          <div className="flex justify-end">
+                            {post.rating ? (
+                              <span
+                                className="text-[9px] font-bold uppercase tracking-[0.16em] px-[7px] py-[4px] rounded-[2px] tabular-nums"
+                                style={{
+                                  color: postCol,
+                                  border: `1px solid ${postCol}`,
+                                  background: postBg,
+                                  fontFamily: "var(--font-dm-sans)",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {post.rating}
+                              </span>
+                            ) : (
+                              <span style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)", fontSize: 11 }}>—</span>
+                            )}
+                          </div>
+
+                          {/* PT — fixed-width, right-aligned tabular */}
+                          <span
+                            className="text-[12px] tabular-nums text-right"
+                            style={{
+                              color: post.priceTarget != null ? "var(--ink)" : "var(--subtle)",
+                              fontFamily: "var(--font-dm-sans)",
+                              fontWeight: post.priceTarget != null ? 500 : 400,
+                            }}
+                          >
+                            {post.priceTarget != null ? formatPrice(post.priceTarget, currency) : "—"}
+                          </span>
+
+                          {/* Pub price — fixed-width, right-aligned tabular */}
+                          <span
+                            className="text-[12px] tabular-nums text-right"
+                            style={{
+                              color: "var(--subtle)",
+                              fontFamily: "var(--font-dm-sans)",
+                            }}
+                          >
+                            {post.priceAtPublication != null ? formatPrice(post.priceAtPublication, currency) : "—"}
+                          </span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           );
@@ -252,7 +302,7 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
 
           <div
             className="flex items-baseline gap-3 pb-3"
-            style={{ borderBottom: "1px solid var(--gold)" }}
+            style={{ borderBottom: "1.5px solid var(--gold)" }}
           >
             <h2
               className="font-display font-bold leading-none"
@@ -274,48 +324,32 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
                 key={post.slug}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{
-                  delay: companyGroups.length * 0.07 + pi * 0.05 + 0.18,
-                  duration: 0.28,
-                }}
+                transition={{ delay: companyGroups.length * 0.07 + pi * 0.05 + 0.18, duration: 0.28 }}
               >
                 <Link href={`/research/${post.slug}`} className="block group">
                   <div
-                    className="grid items-center gap-x-5 py-3 px-3 -mx-3 rounded-[2px] hover:bg-[rgba(28,28,28,0.03)] transition-colors"
-                    style={{
-                      gridTemplateColumns: "52px 1fr auto",
-                      borderBottom: "1px solid var(--muted)",
-                    }}
+                    className="grid items-center gap-x-4 py-[11px] px-3 -mx-3 rounded-[2px] hover:bg-[rgba(28,28,28,0.03)] transition-colors"
+                    style={{ gridTemplateColumns: "52px 1fr auto", borderBottom: "1px solid var(--muted)" }}
                   >
                     <span
                       className="text-[11px] tabular-nums"
                       style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
                     >
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        month: "short",
-                        year: "2-digit",
-                      })}
+                      {new Date(post.date).toLocaleDateString("en-US", { month: "short", year: "2-digit" })}
                     </span>
                     <span
                       className="text-sm leading-snug transition-colors group-hover:text-[var(--teal)]"
                       style={{ color: "var(--ink)", fontFamily: "var(--font-dm-sans)", fontWeight: 400 }}
                     >
                       {post.title}
-                      <span
-                        className="ml-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ color: "var(--teal)" }}
-                      >
+                      <span className="ml-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--teal)" }}>
                         →
                       </span>
                     </span>
                     {post.pdfUrl && (
                       <span
                         className="text-[10px] font-semibold px-2 py-1 rounded-[2px] flex-shrink-0"
-                        style={{
-                          border: "1px solid var(--gold)",
-                          color: "var(--gold)",
-                          fontFamily: "var(--font-dm-sans)",
-                        }}
+                        style={{ border: "1px solid var(--gold)", color: "var(--gold)", fontFamily: "var(--font-dm-sans)" }}
                       >
                         PDF ↓
                       </span>
@@ -331,11 +365,7 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
       {/* Footer */}
       <div
         className="pt-8 mt-8 text-center text-[10px] uppercase tracking-[0.18em]"
-        style={{
-          borderTop: "1px solid var(--muted)",
-          color: "var(--subtle)",
-          fontFamily: "var(--font-dm-sans)",
-        }}
+        style={{ borderTop: "1px solid var(--muted)", color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
       >
         {companyGroups.length} {companyGroups.length === 1 ? "company" : "companies"} under coverage
         {memos.length > 0 && ` · ${memos.length} memos published`}
