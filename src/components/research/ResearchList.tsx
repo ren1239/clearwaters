@@ -153,15 +153,14 @@ export function ResearchList({ posts, tickers: _tickers, livePrices = {} }: Prop
                     const lp = livePrices[group.ticker];
                     if (!lp?.price) return null;
                     const arrow = lp.direction === "up" ? "▲" : lp.direction === "down" ? "▼" : null;
-                    const arrowColor = lp.direction === "up" ? "var(--teal)" : lp.direction === "down" ? "#c0392b" : "var(--subtle)";
                     return (
                       <span
                         className="text-[13px] tabular-nums font-medium leading-none"
-                        style={{ color: "var(--ink)", fontFamily: "var(--font-dm-sans)" }}
+                        style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
                       >
                         {formatPrice(lp.price, lp.currency)}
                         {arrow && (
-                          <span className="ml-1 text-[10px]" style={{ color: arrowColor }}>
+                          <span className="ml-1 text-[10px]" style={{ color: "var(--subtle)" }}>
                             {arrow}
                           </span>
                         )}
