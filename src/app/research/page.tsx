@@ -4,6 +4,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ResearchList } from "@/components/research/ResearchList";
 import { CoverageRegister } from "@/components/research/CoverageRegister";
+import { PortfolioHeatmap } from "@/components/research/PortfolioHeatmap";
 import { COVERAGE } from "@/lib/coverageConfig";
 
 export default async function ResearchPage() {
@@ -54,6 +55,7 @@ export default async function ResearchPage() {
 
         <ResearchList posts={posts} tickers={tickers} livePrices={livePrices} />
         <CoverageRegister livePrices={livePrices} />
+        <PortfolioHeatmap />
       </main>
 
       <Footer />
