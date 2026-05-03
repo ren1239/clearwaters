@@ -3,9 +3,7 @@ import { getLivePrice, type LivePrice } from "@/lib/prices";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ResearchList } from "@/components/research/ResearchList";
-import { CoverageRegister } from "@/components/research/CoverageRegister";
 import { PortfolioHeatmap } from "@/components/research/PortfolioHeatmap";
-import { COVERAGE } from "@/lib/coverageConfig";
 
 export default async function ResearchPage() {
   const posts = getAllResearchPosts();
@@ -21,13 +19,6 @@ export default async function ResearchPage() {
       };
     }
   }
-  // Add any coverage config tickers not already covered by posts
-  for (const entry of COVERAGE) {
-    if (!tickerMeta[entry.ticker]) {
-      tickerMeta[entry.ticker] = { currency: entry.currency };
-    }
-  }
-
   // Fetch live prices in parallel for all covered tickers
   const priceEntries = await Promise.all(
     Object.entries(tickerMeta).map(([ticker, meta]) =>
@@ -54,7 +45,6 @@ export default async function ResearchPage() {
         <div className="h-px w-10 mb-10" style={{ background: "var(--gold)" }} />
 
         <ResearchList posts={posts} tickers={tickers} livePrices={livePrices} />
-        <CoverageRegister livePrices={livePrices} />
         <PortfolioHeatmap />
       </main>
 
