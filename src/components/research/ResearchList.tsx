@@ -4,11 +4,12 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import type { ResearchFrontmatter } from "@/types/research";
-import { formatPrice } from "@/lib/prices";
+import { formatPrice, type LivePrice } from "@/lib/prices";
 
 interface Props {
   posts: ResearchFrontmatter[];
   tickers: string[];
+  livePrices?: Record<string, LivePrice>;
 }
 
 type FilterType = "all" | "memo" | "letter";
@@ -46,7 +47,7 @@ function getArticleSubtitle(title: string): string {
   return idx > -1 ? title.slice(idx + 1).trim() : title;
 }
 
-export function ResearchList({ posts, tickers: _tickers }: Props) {
+export function ResearchList({ posts, tickers: _tickers, livePrices = {} }: Props) {
   const [activeType, setActiveType] = useState<FilterType>("all");
 
   const memos = useMemo(() => posts.filter((p) => p.type === "memo"), [posts]);
@@ -145,20 +146,44 @@ export function ResearchList({ posts, tickers: _tickers }: Props) {
                   )}
                 </div>
 
-                {/* Current rating badge — prominent, right-aligned */}
-                {group.latestRating && (
-                  <span
-                    className="text-[11px] font-bold uppercase tracking-[0.2em] px-4 py-[6px] rounded-[2px] flex-shrink-0"
-                    style={{
-                      color: col,
-                      border: `1px solid ${col}`,
-                      background: group.latestRating ? ratingBg[group.latestRating] : "transparent",
-                      fontFamily: "var(--font-dm-sans)",
-                    }}
-                  >
-                    {group.latestRating}
-                  </span>
-                )}
+                {/* Right side: live price + rating badge */}
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  {/* Live price */}
+                  {(() => {
+                    const lp = livePrices[group.ticker];
+                    if (!lp?.price) return null;
+                    const arrow = lp.direction === "up" ? "▲" : lp.direction === "down" ? "▼" : null;
+                    const arrowColor = lp.direction === "up" ? "var(--teal)" : lp.direction === "down" ? "#c0392b" : "var(--subtle)";
+                    return (
+                      <span
+                        className="text-[13px] tabular-nums font-medium leading-none"
+                        style={{ color: "var(--ink)", fontFamily: "var(--font-dm-sans)" }}
+                      >
+                        {formatPrice(lp.price, lp.currency)}
+                        {arrow && (
+                          <span className="ml-1 text-[10px]" style={{ color: arrowColor }}>
+                            {arrow}
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })()}
+
+                  {/* Rating badge */}
+                  {group.latestRating && (
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-[0.2em] px-4 py-[6px] rounded-[2px]"
+                      style={{
+                        color: col,
+                        border: `1px solid ${col}`,
+                        background: group.latestRating ? ratingBg[group.latestRating] : "transparent",
+                        fontFamily: "var(--font-dm-sans)",
+                      }}
+                    >
+                      {group.latestRating}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Column headers */}
