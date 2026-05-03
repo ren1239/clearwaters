@@ -1,41 +1,116 @@
 import { TOP_HOLDINGS } from "@/lib/portfolioData";
-import { COVERAGE } from "@/lib/coverageConfig";
 
-// Build a ticker → rating map from coverage (normalise $ prefix)
-const coverageByTicker = new Map(
-  COVERAGE.map((c) => [c.ticker.replace("$", ""), c.rating])
-);
+// ─── Squarified treemap algorithm ────────────────────────────────────────────
 
-const ratingColor: Record<string, string> = {
-  BUY:  "var(--teal)",
-  HOLD: "var(--gold)",
-  SELL: "#c0392b",
-};
-const ratingBg: Record<string, string> = {
-  BUY:  "rgba(45,139,139,0.07)",
-  HOLD: "rgba(200,169,110,0.07)",
-  SELL: "rgba(192,57,43,0.07)",
-};
+const LW = 1000; // logical coordinate width
+const LH = 280;  // logical coordinate height
 
-// Split into 3 rows: top-3, next-3, last-4
-const ROWS = [
-  TOP_HOLDINGS.slice(0, 3),
-  TOP_HOLDINGS.slice(3, 6),
-  TOP_HOLDINGS.slice(6, 10),
-];
+interface TileRect { x: number; y: number; w: number; h: number }
+interface TileData  { ticker: string; name: string; alloc: number; rect: TileRect }
 
-const total = TOP_HOLDINGS.reduce((s, h) => s + h.alloc, 0);
-
-function rowHeight(row: typeof TOP_HOLDINGS): string {
-  return `${(row.reduce((s, h) => s + h.alloc, 0) / total) * 100}%`;
+function worstRatio(
+  items: typeof TOP_HOLDINGS,
+  rowSum: number,
+  total: number,
+  w: number,
+  h: number,
+  isWide: boolean,
+): number {
+  const thickness = (isWide ? w : h) * (rowSum / total);
+  const length    = isWide ? h : w;
+  let worst = 0;
+  for (const item of items) {
+    const cellLen = length * (item.alloc / rowSum);
+    const r = thickness > cellLen ? thickness / cellLen : cellLen / thickness;
+    if (r > worst) worst = r;
+  }
+  return worst;
 }
 
+function squarifyLayout(
+  items: typeof TOP_HOLDINGS,
+  rect: TileRect,
+  result: TileData[],
+): void {
+  if (items.length === 0) return;
+  if (items.length === 1) { result.push({ ...items[0], rect }); return; }
+
+  const total  = items.reduce((s, i) => s + i.alloc, 0);
+  const { x, y, w, h } = rect;
+  const isWide = w >= h;
+
+  // Greedy: keep adding items to the row while aspect ratio improves
+  let bestN     = 1;
+  let rowSum    = items[0].alloc;
+  let bestWorst = worstRatio([items[0]], rowSum, total, w, h, isWide);
+
+  for (let n = 2; n <= items.length; n++) {
+    rowSum += items[n - 1].alloc;
+    const worst = worstRatio(items.slice(0, n), rowSum, total, w, h, isWide);
+    if (worst > bestWorst) { rowSum -= items[n - 1].alloc; break; }
+    bestWorst = worst;
+    bestN = n;
+  }
+
+  const row = items.slice(0, bestN);
+  rowSum = row.reduce((s, i) => s + i.alloc, 0);
+  const rowFrac = rowSum / total;
+
+  if (isWide) {
+    const colW = w * rowFrac;
+    let curY = y;
+    for (const item of row) {
+      const tileH = h * (item.alloc / rowSum);
+      result.push({ ...item, rect: { x, y: curY, w: colW, h: tileH } });
+      curY += tileH;
+    }
+    squarifyLayout(items.slice(bestN), { x: x + colW, y, w: w - colW, h }, result);
+  } else {
+    const rowH = h * rowFrac;
+    let curX = x;
+    for (const item of row) {
+      const tileW = w * (item.alloc / rowSum);
+      result.push({ ...item, rect: { x: curX, y, w: tileW, h: rowH } });
+      curX += tileW;
+    }
+    squarifyLayout(items.slice(bestN), { x, y: y + rowH, w, h: h - rowH }, result);
+  }
+}
+
+// Precompute at module level — static data, computed once
+const sorted = [...TOP_HOLDINGS].sort((a, b) => b.alloc - a.alloc);
+const TILES: TileData[] = [];
+squarifyLayout(sorted, { x: 0, y: 0, w: LW, h: LH }, TILES);
+
+// ─── Color scale (pale teal → deep teal) ─────────────────────────────────────
+
+const MIN_ALLOC = sorted[sorted.length - 1].alloc;
+const MAX_ALLOC = sorted[0].alloc;
+
+// light: rgb(200,228,228)  dark: rgb(28,88,88)
+function tileColor(alloc: number): string {
+  const t = (alloc - MIN_ALLOC) / (MAX_ALLOC - MIN_ALLOC);
+  const r = Math.round(200 + t * (28  - 200));
+  const g = Math.round(228 + t * (88  - 228));
+  const b = Math.round(228 + t * (88  - 228));
+  return `rgb(${r},${g},${b})`;
+}
+
+function textColor(alloc: number): string {
+  const t = (alloc - MIN_ALLOC) / (MAX_ALLOC - MIN_ALLOC);
+  return t > 0.42 ? "#F8F5EF" : "#1d5c5c";
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function PortfolioHeatmap() {
+  const legendStops = [0, 5, 10, 15, 20];
+  const lightColor  = tileColor(MIN_ALLOC);
+  const darkColor   = tileColor(MAX_ALLOC);
+
   return (
-    <div
-      className="pt-8 mt-8"
-      style={{ borderTop: "1px solid var(--muted)" }}
-    >
+    <div className="pt-8 mt-8" style={{ borderTop: "1px solid var(--muted)" }}>
+
       {/* Header */}
       <div className="flex items-baseline justify-between mb-5">
         <h2
@@ -48,163 +123,111 @@ export function PortfolioHeatmap() {
           className="text-[9px] font-semibold uppercase tracking-[0.18em]"
           style={{ color: "var(--subtle)", fontFamily: "var(--font-dm-sans)" }}
         >
-          Top 10 holdings · area = allocation
+          Top 10 holdings · area = allocation %
         </span>
       </div>
 
       {/* Treemap */}
-      <div
-        style={{
-          height: 280,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        {ROWS.map((row, ri) => (
-          <div
-            key={ri}
-            style={{
-              height: rowHeight(row),
-              display: "flex",
-              gap: 2,
-              flex: "none",
-            }}
-          >
-            {row.map((holding) => {
-              const rating = coverageByTicker.get(holding.ticker);
-              const col   = rating ? ratingColor[rating] : "var(--muted)";
-              const bg    = rating ? ratingBg[rating]    : "rgba(28,28,28,0.04)";
-              const isCovered = !!rating;
+      <div style={{ position: "relative", width: "100%", paddingBottom: `${(LH / LW) * 100}%` }}>
+        <div style={{ position: "absolute", inset: 0 }}>
+          {TILES.map((tile) => {
+            const left   = `${(tile.rect.x / LW) * 100}%`;
+            const top    = `${(tile.rect.y / LH) * 100}%`;
+            const width  = `${(tile.rect.w / LW) * 100}%`;
+            const height = `${(tile.rect.h / LH) * 100}%`;
+            const bg     = tileColor(tile.alloc);
+            const fg     = textColor(tile.alloc);
 
-              return (
+            return (
+              <div
+                key={tile.ticker}
+                style={{
+                  position: "absolute",
+                  left, top, width, height,
+                  padding: 1.5,
+                  boxSizing: "border-box",
+                }}
+              >
                 <div
-                  key={holding.ticker}
                   style={{
-                    flex: holding.alloc,
+                    width: "100%",
+                    height: "100%",
                     background: bg,
-                    borderTop: `2px solid ${col}`,
-                    padding: "10px 11px 9px",
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: "center",
                     overflow: "hidden",
-                    minWidth: 0,
+                    gap: 3,
                   }}
                 >
-                  {/* Top row: ticker + coverage badge */}
-                  <div
+                  <span
                     style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "space-between",
-                      gap: 4,
+                      fontFamily: "var(--font-dm-sans)",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: fg,
+                      lineHeight: 1,
                     }}
                   >
-                    <span
-                      style={{
-                        fontFamily: "var(--font-dm-sans)",
-                        fontSize: 11,
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "var(--ink)",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {holding.ticker}
-                    </span>
-                    {isCovered && (
-                      <span
-                        style={{
-                          fontFamily: "var(--font-dm-sans)",
-                          fontSize: 8,
-                          fontWeight: 700,
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          color: col,
-                          lineHeight: 1,
-                          flexShrink: 0,
-                        }}
-                      >
-                        {rating}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Bottom row: company name + alloc */}
-                  <div
+                    {tile.ticker}
+                  </span>
+                  <span
                     style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      justifyContent: "space-between",
-                      gap: 4,
+                      fontFamily: "var(--font-dm-sans)",
+                      fontSize: 9,
+                      color: fg,
+                      opacity: 0.75,
+                      lineHeight: 1,
+                      fontVariantNumeric: "tabular-nums",
                     }}
                   >
-                    <span
-                      style={{
-                        fontFamily: "var(--font-dm-sans)",
-                        fontSize: 9,
-                        color: "var(--subtle)",
-                        lineHeight: 1,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {holding.name}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-dm-sans)",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: "var(--ink)",
-                        fontVariantNumeric: "tabular-nums",
-                        lineHeight: 1,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {holding.alloc.toFixed(1)}%
-                    </span>
-                  </div>
+                    {tile.alloc.toFixed(1)}%
+                  </span>
                 </div>
-              );
-            })}
-          </div>
-        ))}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Legend */}
       <div
-        className="flex items-center gap-5 mt-4"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
+        className="flex flex-col items-center"
+        style={{ marginTop: 20, gap: 5 }}
       >
-        <div className="flex items-center gap-[6px]">
-          <div
-            style={{ width: 12, height: 2, background: "var(--teal)", borderRadius: 1 }}
-          />
-          <span className="text-[9px] uppercase tracking-[0.16em] font-semibold" style={{ color: "var(--subtle)" }}>
-            Coverage · BUY
-          </span>
-        </div>
-        <div className="flex items-center gap-[6px]">
-          <div
-            style={{ width: 12, height: 2, background: "var(--gold)", borderRadius: 1 }}
-          />
-          <span className="text-[9px] uppercase tracking-[0.16em] font-semibold" style={{ color: "var(--subtle)" }}>
-            Coverage · HOLD
-          </span>
-        </div>
-        <div className="flex items-center gap-[6px]">
-          <div
-            style={{ width: 12, height: 2, background: "var(--muted)", borderRadius: 1 }}
-          />
-          <span className="text-[9px] uppercase tracking-[0.16em] font-semibold" style={{ color: "var(--subtle)" }}>
-            Not covered
-          </span>
+        <div
+          style={{
+            width: 280,
+            height: 10,
+            borderRadius: 2,
+            background: `linear-gradient(to right, ${lightColor}, ${darkColor})`,
+          }}
+        />
+        <div
+          style={{
+            width: 280,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          {legendStops.map((v) => (
+            <span
+              key={v}
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: 9,
+                color: "var(--subtle)",
+              }}
+            >
+              {v}
+            </span>
+          ))}
         </div>
       </div>
+
     </div>
   );
 }
