@@ -3,12 +3,14 @@ import { getLivePrice, type LivePrice } from "@/lib/prices";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ResearchList } from "@/components/research/ResearchList";
+import { CoverageRegister } from "@/components/research/CoverageRegister";
+import { COVERAGE } from "@/lib/coverageConfig";
 
 export default async function ResearchPage() {
   const posts = getAllResearchPosts();
   const tickers = getAllTickers();
 
-  // Build a map of ticker → { currency, priceAtPublication } from the latest post per ticker
+  // Build a map of ticker → { currency, priceAtPublication } from posts + coverage config
   const tickerMeta: Record<string, { currency: string; priceAtPublication?: number }> = {};
   for (const post of posts) {
     if (post.ticker && !tickerMeta[post.ticker]) {
@@ -16,6 +18,12 @@ export default async function ResearchPage() {
         currency: post.currency ?? "USD",
         priceAtPublication: post.priceAtPublication,
       };
+    }
+  }
+  // Add any coverage config tickers not already covered by posts
+  for (const entry of COVERAGE) {
+    if (!tickerMeta[entry.ticker]) {
+      tickerMeta[entry.ticker] = { currency: entry.currency };
     }
   }
 
@@ -45,6 +53,7 @@ export default async function ResearchPage() {
         <div className="h-px w-10 mb-10" style={{ background: "var(--gold)" }} />
 
         <ResearchList posts={posts} tickers={tickers} livePrices={livePrices} />
+        <CoverageRegister livePrices={livePrices} />
       </main>
 
       <Footer />
